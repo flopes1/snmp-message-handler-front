@@ -1,20 +1,65 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
+<div style="text-align:center" *ngIf="showGisele">
   <h1>
-    Welcome to {{title}}!
+    {{title}}! Clique na Gisele para começar
   </h1>
-  <img width="300" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+  <img src="../assets/img/gisele.jpg" (click)="showMainExecute()">
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
+<div *ngIf="showMain" class="container">
+  <h1>SNMP Message Form</h1>
+  <form>
+    <div class="form-group">
+      <label>Community:</label>
+      <div class="input-group-lg">
+        <span class="input-group"></span>
+        <input type="text" class="form-control" [(ngModel)]="message.community" name="community" />
+      </div>
+      <span class="help-block">Must be public or private</span>
+    </div>
+
+    <div class="form-group">
+      <label>Object ID (OID):</label>
+      <div class="input-group-lg">
+        <span class="input-group"></span>
+        <input type="text" class="form-control" [(ngModel)]="message.objectId" name="objectId" />
+      </div>
+      <span class="help-block">Search:
+        <a href="http://www.net-snmp.org/docs/mibs/">net-snmp.org</a> or
+        <a href="http://oid-info.com/">oid-info.com/</a>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label>Target IP:</label>
+      <div class="input-group-lg">
+        <span class="input-group"></span>
+        <input type="text" class="form-control" [(ngModel)]="message.targetIp" name="targetIp" />
+        <span class="help-block">127.0.0.1 for localhost / Target must have agent enabled</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Port:</label>
+      <div class="input-group-lg">
+        <span class="input-group"></span>
+        <input type="text" class="form-control" [(ngModel)]="message.targetPort" name="targetPort" />
+      </div>
+      <span class="help-block">161 for desktops / 9002 for mobile devices</span>
+    </div>
+
+    <div class="form-group">
+      <button type="button" (click)="sendMessage()" class="btn btn-success">Submit</button>
+      <button type="button" (click)="showResults()" class="btn btn-warning">Show Responses</button>
+    </div>
+  </form>
+
+</div>
+
+<div *ngIf="showTableResults" class="container-fluid">
+  <h1>SNMP Message Response History</h1>
+  <br>
+  <ng-table [rows]="snmpMessageHistory" [columns]="columns">
+  </ng-table>
+  <button type="button" (click)="clear()" class="btn btn-success">Back</button>
+</div>
